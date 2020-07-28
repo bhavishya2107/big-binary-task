@@ -2,18 +2,27 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import BootStrapTable from "react-bootstrap-table-next";
 import paginationFactory from "react-bootstrap-table2-paginator";
-import moment from "moment";
+import ModalContent from "../Components/ModelContent";
 
 const Dashboard = () => {
   const [launches, setLaunches] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [modalInfo, setModalInfo] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const toggleModal = () => {
+    setShowModal(handleShow);
+  };
 
   const getAllLaunchData = async (searchTerm) => {
     try {
       const launchData = await axios.get(
         "https://api.spacexdata.com/v3/launches"
       );
-      console.log(launchData.data);
       setLaunches(launchData.data);
     } catch (error) {
       console.log(error);
@@ -28,6 +37,15 @@ const Dashboard = () => {
     { dataField: "launch_success", text: "Launch Status" },
   ];
 
+  const rowEvents = {
+    onClick: (e, row) => {
+      console.log(row);
+      console.log(modalInfo);
+      setModalInfo(row);
+      toggleModal();
+    },
+  };
+
   useEffect(() => {
     getAllLaunchData();
   }, []);
@@ -39,9 +57,18 @@ const Dashboard = () => {
         data={launches}
         columns={columns}
         striped={true}
-        hover={true}
+        // hover={true}
         pagination={paginationFactory()}
+        rowEvents={rowEvents}
       />
+      {show ? (
+        <ModalContent
+          modalInfo={modalInfo}
+          handleClose={handleClose}
+          show={show}
+          setShow={setShow}
+        />
+      ) : null}
     </div>
   );
 };
