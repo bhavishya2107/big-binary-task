@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, Button } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import { FaWikipediaW, FaMediumM } from "react-icons/fa";
 
 const ModalContent = ({ modalInfo, handleClose, show }) => {
@@ -29,8 +29,10 @@ const ModalContent = ({ modalInfo, handleClose, show }) => {
             width="100%"
             title="Video player"
             src={
-              "https://www.youtube.com/embed/" +
-              modalInfo.links.video_link.split("=")[1]
+              modalInfo.links.video_link
+                ? "https://www.youtube.com/embed/" +
+                  modalInfo.links.video_link.split("=")[1]
+                : null
             }
             allowFullScreen="allowfullscreen"
             mozallowfullscreen="mozallowfullscreen"

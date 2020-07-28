@@ -3,6 +3,7 @@ import axios from "axios";
 import BootStrapTable from "react-bootstrap-table-next";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import ModalContent from "../Components/ModelContent";
+import FilterDropDown from "../Components/FilterDropDown";
 
 const Dashboard = () => {
   const [launches, setLaunches] = useState([]);
@@ -10,6 +11,7 @@ const Dashboard = () => {
   const [modalInfo, setModalInfo] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [show, setShow] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -18,11 +20,12 @@ const Dashboard = () => {
     setShowModal(handleShow);
   };
 
-  const getAllLaunchData = async (searchTerm) => {
+  const getAllLaunchData = async () => {
     try {
       const launchData = await axios.get(
-        "https://api.spacexdata.com/v3/launches"
+        `https://api.spacexdata.com/v3/launches/${searchTerm}`
       );
+      console.log(launchData.data);
       setLaunches(launchData.data);
     } catch (error) {
       console.log(error);
@@ -40,7 +43,6 @@ const Dashboard = () => {
   const rowEvents = {
     onClick: (e, row) => {
       console.log(row);
-      console.log(modalInfo);
       setModalInfo(row);
       toggleModal();
     },
@@ -48,10 +50,11 @@ const Dashboard = () => {
 
   useEffect(() => {
     getAllLaunchData();
-  }, []);
+  }, [searchTerm]);
 
   return (
     <div>
+      <FilterDropDown setSearchTerm={setSearchTerm} />
       <BootStrapTable
         keyField="flight_number"
         data={launches}
