@@ -1,4 +1,4 @@
-export const getLaunchesInBetweenDates = (endDate, startDate) => {
+export const getLaunchesInBetweenDates = (endDate, startDate, setLaunches, launches) => {
   const ed = endDate && endDate.getTime();
   const sd = startDate && startDate.getTime();
   if (ed < sd) {

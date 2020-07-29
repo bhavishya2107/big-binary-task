@@ -5,6 +5,8 @@ import paginationFactory from "react-bootstrap-table2-paginator";
 import ModalContent from "../Components/ModelContent";
 import FilterDropDown from "../Components/FilterDropDown";
 import FilterByDate from "../Components/FilterByDate";
+import FilterBySuccessFailure from "../Components/FilterBySuccessFailure";
+// import { getLaunchesInBetweenDates } from "../utils/date";
 
 const Dashboard = () => {
   const [launches, setLaunches] = useState([]);
@@ -15,6 +17,7 @@ const Dashboard = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+  const [currentLaunch, setCurrentLaunch] = useState("");
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -27,7 +30,7 @@ const Dashboard = () => {
     const ed = endDate && endDate.getTime();
     const sd = startDate && startDate.getTime();
     if (ed < sd) {
-      alert("errro");
+      setEndDate(null);
     } else {
       const result = launches.filter((d) => {
         var time = new Date(d.launch_date_utc).getTime();
@@ -39,14 +42,33 @@ const Dashboard = () => {
   };
 
   const getAllLaunchData = async () => {
+    // setLoading(false);
+    // if (loading) {
+    //   return <div>Loading</div>;
+    // }
     try {
       const launchData = await axios.get(
         `https://api.spacexdata.com/v3/launches/${searchTerm}`
       );
       console.log(launchData.data);
       setLaunches(launchData.data);
+      // setLoading(true);
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const getAllLaunches = () => {
+    if (currentLaunch === "success") {
+      let successLaunches = launches.filter((launch) => launch.launch_success);
+      return successLaunches;
+    } else if (currentLaunch === "fail") {
+      let failLaunches = launches.filter(
+        (launch) => launch.launch_success === false
+      );
+      return failLaunches;
+    } else {
+      return launches;
     }
   };
 
@@ -80,17 +102,18 @@ const Dashboard = () => {
   return (
     <div>
       <FilterDropDown setSearchTerm={setSearchTerm} />
-
-      <FilterByDate
-        startDate={startDate}
-        endDate={endDate}
-        setEndDate={setEndDate}
-        setStartDate={setStartDate}
-      />
-
+      <div className="d-flex justify-content-between">
+        <FilterByDate
+          startDate={startDate}
+          endDate={endDate}
+          setEndDate={setEndDate}
+          setStartDate={setStartDate}
+        />
+        <FilterBySuccessFailure setCurrentLaunch={setCurrentLaunch} />
+      </div>
       <BootStrapTable
         keyField="flight_number"
-        data={launches}
+        data={getAllLaunches()}
         columns={columns}
         striped={true}
         pagination={paginationFactory()}

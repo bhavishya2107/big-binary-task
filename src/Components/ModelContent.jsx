@@ -22,7 +22,7 @@ const ModalContent = ({ modalInfo, handleClose, show }) => {
           </p>
           <p className="p-2">{modalInfo && modalInfo.details}</p>
         </div>
-        {modalInfo && modalInfo.links ? (
+        {modalInfo && modalInfo.links.video_link ? (
           <iframe
             frameBorder="0"
             height="450px"
@@ -41,7 +41,9 @@ const ModalContent = ({ modalInfo, handleClose, show }) => {
             webkitallowfullscreen="webkitallowfullscreen"
           />
         ) : (
-          "No relevant data to display"
+          <div className="d-flex mb-2">
+            <p>No relevant data to display</p>
+          </div>
         )}
       </Modal.Body>
       <Modal.Footer>
