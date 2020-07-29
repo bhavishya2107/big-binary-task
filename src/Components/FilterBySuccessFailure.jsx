@@ -4,6 +4,7 @@ import { Form } from "react-bootstrap";
 const FilterBySuccessFailure = ({ setCurrentLaunch }) => {
   return (
     <div>
+      <p>Filter Success/Failed:</p>
       <Form.Group>
         <Form.Control
           as="select"

@@ -4,6 +4,7 @@ import { Form } from "react-bootstrap";
 const FilterDropDown = ({ setSearchTerm }) => {
   return (
     <div>
+      <p>Filter Upcoming/Past Launches:</p>
       <Form.Group>
         <Form.Control
           as="select"

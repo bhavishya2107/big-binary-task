@@ -70,14 +70,17 @@ const Dashboard = () => {
   const columns = [
     { dataField: "flight_number", text: "Flight No." },
     { dataField: "rocket.rocket_name", text: "Rocket Name" },
-    { dataField: "launch_year", text: "Launch Year" },
+    { dataField: "rocket.rocket_type", text: "Rocket Type" },
+    { dataField: "rocket.second_stage.payloads[0].orbit", text: "Orbit" },
     { dataField: "launch_site.site_name", text: "Location" },
+    { dataField: "launch_year", text: "Launch Year" },
     { dataField: "launch_success", text: "Launch Status" },
   ];
 
   const rowEvents = {
     onClick: (e, row) => {
       setModalInfo(row);
+      console.log(row);
       toggleModal();
     },
   };
@@ -97,13 +100,17 @@ const Dashboard = () => {
     <div>
       <FilterDropDown setSearchTerm={setSearchTerm} />
       <div className="d-flex justify-content-between">
-        <FilterByDate
-          startDate={startDate}
-          endDate={endDate}
-          setEndDate={setEndDate}
-          setStartDate={setStartDate}
-        />
-        <FilterBySuccessFailure setCurrentLaunch={setCurrentLaunch} />
+        <div>
+          <FilterByDate
+            startDate={startDate}
+            endDate={endDate}
+            setEndDate={setEndDate}
+            setStartDate={setStartDate}
+          />
+        </div>
+        <div>
+          <FilterBySuccessFailure setCurrentLaunch={setCurrentLaunch} />
+        </div>
       </div>
 
       {loading ? (

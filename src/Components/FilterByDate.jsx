@@ -5,6 +5,7 @@ import "react-datepicker/dist/react-datepicker.css";
 const FilterByDate = ({ startDate, setStartDate, setEndDate, endDate }) => {
   return (
     <div>
+      <p>Filter By Date:</p>
       <div className="mb-3 d-flex">
         <DatePicker
           selected={startDate}
