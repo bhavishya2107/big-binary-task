@@ -6,7 +6,7 @@ import ModalContent from "../Components/ModelContent";
 import FilterDropDown from "../Components/FilterDropDown";
 import FilterByDate from "../Components/FilterByDate";
 import FilterBySuccessFailure from "../Components/FilterBySuccessFailure";
-// import { getLaunchesInBetweenDates } from "../utils/date";
+import Loader from "./Loader";
 
 const Dashboard = () => {
   const [launches, setLaunches] = useState([]);
@@ -42,17 +42,13 @@ const Dashboard = () => {
   };
 
   const getAllLaunchData = async () => {
-    // setLoading(false);
-    // if (loading) {
-    //   return <div>Loading</div>;
-    // }
     try {
+      setLoading(true);
       const launchData = await axios.get(
         `https://api.spacexdata.com/v3/launches/${searchTerm}`
       );
-      console.log(launchData.data);
       setLaunches(launchData.data);
-      // setLoading(true);
+      setLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -82,7 +78,6 @@ const Dashboard = () => {
 
   const rowEvents = {
     onClick: (e, row) => {
-      console.log(row);
       setModalInfo(row);
       toggleModal();
     },
@@ -111,14 +106,20 @@ const Dashboard = () => {
         />
         <FilterBySuccessFailure setCurrentLaunch={setCurrentLaunch} />
       </div>
-      <BootStrapTable
-        keyField="flight_number"
-        data={getAllLaunches()}
-        columns={columns}
-        striped={true}
-        pagination={paginationFactory()}
-        rowEvents={rowEvents}
-      />
+
+      {loading ? (
+        <Loader />
+      ) : (
+        <BootStrapTable
+          keyField="flight_number"
+          data={getAllLaunches()}
+          columns={columns}
+          striped={true}
+          pagination={paginationFactory()}
+          rowEvents={rowEvents}
+        />
+      )}
+
       {show ? (
         <ModalContent
           modalInfo={modalInfo}
