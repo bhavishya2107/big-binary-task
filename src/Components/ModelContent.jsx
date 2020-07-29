@@ -52,7 +52,7 @@ const ModalContent = ({ modalInfo, handleClose, show }) => {
           />
         ) : (
           <div className="d-flex mb-2">
-            <p>No relevant data to display</p>
+            <p>No relevant video to display</p>
           </div>
         )}
         <br />
