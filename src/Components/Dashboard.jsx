@@ -7,6 +7,11 @@ import FilterDropDown from "../Components/FilterDropDown";
 import FilterByDate from "../Components/FilterByDate";
 import FilterBySuccessFailure from "../Components/FilterBySuccessFailure";
 import Loader from "./Loader";
+import {
+  getLaunchesInBetweenDates,
+  getAllLaunches,
+  toggleModal,
+} from "../utils/methods";
 
 const Dashboard = () => {
   const [launches, setLaunches] = useState([]);
@@ -18,27 +23,8 @@ const Dashboard = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [currentLaunch, setCurrentLaunch] = useState("");
-
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
-  const toggleModal = () => {
-    setShowModal(handleShow);
-  };
-
-  const getLaunchesInBetweenDates = () => {
-    const ed = endDate && endDate.getTime();
-    const sd = startDate && startDate.getTime();
-    if (ed < sd) {
-      setEndDate(null);
-    } else {
-      const result = launches.filter((d) => {
-        var time = new Date(d.launch_date_utc).getTime();
-        return sd < time && time < ed;
-      });
-      setLaunches(result);
-    }
-  };
 
   const getAllLaunchData = async () => {
     try {
@@ -50,20 +36,6 @@ const Dashboard = () => {
       setLoading(false);
     } catch (error) {
       console.log(error);
-    }
-  };
-
-  const getAllLaunches = () => {
-    if (currentLaunch === "success") {
-      let successLaunches = launches.filter((launch) => launch.launch_success);
-      return successLaunches;
-    } else if (currentLaunch === "fail") {
-      let failLaunches = launches.filter(
-        (launch) => launch.launch_success === false
-      );
-      return failLaunches;
-    } else {
-      return launches;
     }
   };
 
@@ -81,7 +53,7 @@ const Dashboard = () => {
     onClick: (e, row) => {
       setModalInfo(row);
       console.log(row);
-      toggleModal();
+      toggleModal(setShowModal, handleShow);
     },
   };
 
@@ -90,7 +62,13 @@ const Dashboard = () => {
   }, [searchTerm]);
 
   useEffect(() => {
-    getLaunchesInBetweenDates();
+    getLaunchesInBetweenDates(
+      endDate,
+      startDate,
+      setLaunches,
+      launches,
+      setEndDate
+    );
     if (!startDate || !endDate) {
       getAllLaunchData();
     }
@@ -118,7 +96,7 @@ const Dashboard = () => {
       ) : (
         <BootStrapTable
           keyField="flight_number"
-          data={getAllLaunches()}
+          data={getAllLaunches(currentLaunch, launches)}
           columns={columns}
           striped={true}
           pagination={paginationFactory()}
