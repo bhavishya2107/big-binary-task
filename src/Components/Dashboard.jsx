@@ -4,6 +4,7 @@ import BootStrapTable from "react-bootstrap-table-next";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import ModalContent from "../Components/ModelContent";
 import FilterDropDown from "../Components/FilterDropDown";
+import FilterByDate from "../Components/FilterByDate";
 
 const Dashboard = () => {
   const [launches, setLaunches] = useState([]);
@@ -12,12 +13,29 @@ const Dashboard = () => {
   const [showModal, setShowModal] = useState(false);
   const [show, setShow] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
   const toggleModal = () => {
     setShowModal(handleShow);
+  };
+
+  const getLaunchesInBetweenDates = () => {
+    const ed = endDate && endDate.getTime();
+    const sd = startDate && startDate.getTime();
+    if (ed < sd) {
+      alert("errro");
+    } else {
+      const result = launches.filter((d) => {
+        var time = new Date(d.launch_date_utc).getTime();
+        return sd < time && time < ed;
+      });
+      console.log(result);
+      setLaunches(result);
+    }
   };
 
   const getAllLaunchData = async () => {
@@ -52,15 +70,29 @@ const Dashboard = () => {
     getAllLaunchData();
   }, [searchTerm]);
 
+  useEffect(() => {
+    getLaunchesInBetweenDates();
+    if (!startDate || !endDate) {
+      getAllLaunchData();
+    }
+  }, [startDate, endDate]);
+
   return (
     <div>
       <FilterDropDown setSearchTerm={setSearchTerm} />
+
+      <FilterByDate
+        startDate={startDate}
+        endDate={endDate}
+        setEndDate={setEndDate}
+        setStartDate={setStartDate}
+      />
+
       <BootStrapTable
         keyField="flight_number"
         data={launches}
         columns={columns}
         striped={true}
-        // hover={true}
         pagination={paginationFactory()}
         rowEvents={rowEvents}
       />
