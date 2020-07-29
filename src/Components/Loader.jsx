@@ -1,9 +1,10 @@
 import React from "react";
+import "../stylesheets/loader.css";
 
 const Loader = () => {
   return (
     <div>
-      <div class="showbox">
+      <div class="showbox container">
         <div class="loader">
           <svg class="circular" viewBox="25 25 50 50">
             <circle
