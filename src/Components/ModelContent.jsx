@@ -1,6 +1,6 @@
 import React from "react";
 import { Modal } from "react-bootstrap";
-import { FaWikipediaW, FaMediumM } from "react-icons/fa";
+import { FaWikipediaW, FaMedium } from "react-icons/fa";
 
 const ModalContent = ({ modalInfo, handleClose, show }) => {
   return (
@@ -41,7 +41,7 @@ const ModalContent = ({ modalInfo, handleClose, show }) => {
             webkitallowfullscreen="webkitallowfullscreen"
           />
         ) : (
-          ""
+          "No relevant data to display"
         )}
       </Modal.Body>
       <Modal.Footer>
@@ -54,7 +54,7 @@ const ModalContent = ({ modalInfo, handleClose, show }) => {
           </div>
           <div className="ml-2">
             <a target="_blank" href={modalInfo.links.wikipedia}>
-              <FaMediumM size={24} />
+              <FaMedium size={24} />
             </a>
           </div>
         </div>
