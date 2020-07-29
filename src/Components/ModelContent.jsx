@@ -1,8 +1,18 @@
-import React from "react";
-import { Modal } from "react-bootstrap";
-import { FaWikipediaW, FaMedium } from "react-icons/fa";
+import React, { useState } from "react";
+import { Modal, Button, Collapse } from "react-bootstrap";
+import { FaWikipediaW, FaMedium, FaAngleDown } from "react-icons/fa";
 
 const ModalContent = ({ modalInfo, handleClose, show }) => {
+  const [open, setOpen] = useState(false);
+  const {
+    mission_name,
+    launch_site,
+    launch_success,
+    rocket,
+    flight_number,
+    launch_date_utc,
+    upcoming,
+  } = modalInfo;
   return (
     <Modal
       show={show}
@@ -45,6 +55,60 @@ const ModalContent = ({ modalInfo, handleClose, show }) => {
             <p>No relevant data to display</p>
           </div>
         )}
+        <br />
+        <Button
+          onClick={() => setOpen(!open)}
+          aria-controls="example-fade-text"
+          aria-expanded={open}
+          variant="outline-secondary"
+          className="text-center"
+        >
+          More Details <FaAngleDown size={24} />
+        </Button>
+        <Collapse in={open}>
+          <div id="example-fade-text" className="p-2">
+            <h6>
+              Flight Number : <span>{flight_number}</span>
+            </h6>
+            <h6>
+              Mission Name : <span>{mission_name}</span>
+            </h6>
+            <h6>
+              Rocket Type : <span>{rocket.rocket_type}</span>
+            </h6>
+            <h6>
+              Rocket Name : <span>{rocket.rocket_name}</span>
+            </h6>
+            <h6>
+              Manufacturer :{" "}
+              <span>{rocket.second_stage.payloads[0].manufacturer}</span>
+            </h6>
+            <h6>
+              Nationality :{" "}
+              <span>{rocket.second_stage.payloads[0].nationality}</span>
+            </h6>
+            <h6>
+              Launch Date : <span>{launch_date_utc}</span>
+            </h6>
+            <h6>
+              Payload Type :{" "}
+              <span>{rocket.second_stage.payloads[0].payload_type}</span>
+            </h6>
+            <h6>
+              Orbit : <span>{rocket.second_stage.payloads[0].orbit}</span>
+            </h6>
+            <h6>
+              Launch Site : <span>{launch_site.site_name}</span>
+            </h6>
+            {!upcoming ? (
+              <h6>
+                Launch Status:{" "}
+                <span>{launch_success ? "Success" : "Fail"}</span>
+              </h6>
+            ) : null}
+            {upcoming ? <span>Upcoming: Yes</span> : null}
+          </div>
+        </Collapse>
       </Modal.Body>
       <Modal.Footer>
         <div className="container text-center d-flex justify-content-center">
