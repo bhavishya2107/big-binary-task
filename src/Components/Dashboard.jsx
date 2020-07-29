@@ -36,7 +36,6 @@ const Dashboard = () => {
         var time = new Date(d.launch_date_utc).getTime();
         return sd < time && time < ed;
       });
-      console.log(result);
       setLaunches(result);
     }
   };

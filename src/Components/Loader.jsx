@@ -4,17 +4,17 @@ import "../stylesheets/loader.css";
 const Loader = () => {
   return (
     <div>
-      <div class="showbox container">
-        <div class="loader">
-          <svg class="circular" viewBox="25 25 50 50">
+      <div className="showbox container">
+        <div className="loader">
+          <svg className="circular" viewBox="25 25 50 50">
             <circle
-              class="path"
+              className="path"
               cx="50"
               cy="50"
               r="20"
               fill="none"
-              stroke-width="2"
-              stroke-miterlimit="10"
+              strokeWidth="2"
+              strokeMiterlimit="10"
             />
           </svg>
         </div>
