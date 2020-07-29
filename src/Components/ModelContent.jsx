@@ -60,8 +60,7 @@ const ModalContent = ({ modalInfo, handleClose, show }) => {
           onClick={() => setOpen(!open)}
           aria-controls="example-fade-text"
           aria-expanded={open}
-          variant="outline-secondary"
-          className="text-center"
+          variant="light"
         >
           More Details <FaAngleDown size={24} />
         </Button>
